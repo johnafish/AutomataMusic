@@ -277,6 +277,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         }
         return img;
     }
+    
     public static void sleep(int millis) throws InterruptedException{
         Thread.sleep(millis);
     }
@@ -285,6 +286,17 @@ public class AutomataMusic extends javax.swing.JFrame {
         this.board = GOL.nextFrame(board);
         BufferedImage img = arrayToImage(board);
         g.drawImage(img, 0, 0, rootPane);
+    }
+    public static int[] collapse(int[][] arr){
+        int[] returnable = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            int column = 0;
+            for (int j = 0; j < arr.length; j++) {
+                column+=arr[i][j];
+            }
+            returnable[i] = column;
+        }
+        return returnable;
     }
     /**
      * @param args the command line arguments
