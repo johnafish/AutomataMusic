@@ -23,6 +23,8 @@
  */
 package automatamusic;
 
+import javax.swing.UIManager;
+
 /**
  *
  * @author John Fish <john@johnafish.ca>
@@ -45,6 +47,7 @@ public class ScreenView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jColorChooser1 = new javax.swing.JColorChooser();
         visualizationPanel = new javax.swing.JPanel();
         title = new javax.swing.JLabel();
         tempoSlider = new javax.swing.JSlider();
@@ -62,6 +65,7 @@ public class ScreenView extends javax.swing.JFrame {
         resetButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(640, 480));
         setName("MainScreen"); // NOI18N
         setResizable(false);
@@ -83,6 +87,18 @@ public class ScreenView extends javax.swing.JFrame {
         title.setFont(new java.awt.Font("Arial Narrow", 0, 36)); // NOI18N
         title.setText("Cellular Music");
 
+        tempoSlider.setMaximum(200);
+        tempoSlider.setMinimum(40);
+        tempoSlider.setMinorTickSpacing(20);
+        tempoSlider.setPaintLabels(true);
+        tempoSlider.setPaintTicks(true);
+        tempoSlider.setValue(120);
+        tempoSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tempoSliderStateChanged(evt);
+            }
+        });
+
         tempoLabel.setText("Tempo");
 
         tempoValue.setText("120");
@@ -96,8 +112,12 @@ public class ScreenView extends javax.swing.JFrame {
             }
         });
 
-        snareCheckBox.setSelected(true);
         snareCheckBox.setText("Snare Drum");
+        snareCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                snareCheckBoxActionPerformed(evt);
+            }
+        });
 
         guitarCheckBox.setText("Electric Guitar");
         guitarCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -134,10 +154,6 @@ public class ScreenView extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(tempoValue))
                                     .addComponent(tempoLabel)
                                     .addComponent(instrumentLabel)
                                     .addGroup(layout.createSequentialGroup()
@@ -151,8 +167,12 @@ public class ScreenView extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(otherCheckBox)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(25, 25, 25))
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(tempoValue)))
+                                .addGap(19, 19, 19))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,32 +234,25 @@ public class ScreenView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_guitarCheckBoxActionPerformed
 
+    private void snareCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snareCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_snareCheckBoxActionPerformed
+
+    private void tempoSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tempoSliderStateChanged
+        int tempo = tempoSlider.getValue();
+        tempoValue.setText(Integer.toString(tempo));
+    }//GEN-LAST:event_tempoSliderStateChanged
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ScreenView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ScreenView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ScreenView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ScreenView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        try{
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e){
+            System.out.println(e);
         }
-        //</editor-fold>
+        
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -253,6 +266,7 @@ public class ScreenView extends javax.swing.JFrame {
     private javax.swing.JCheckBox bellCheckBox;
     private javax.swing.JCheckBox guitarCheckBox;
     private javax.swing.JLabel instrumentLabel;
+    private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JCheckBox otherCheckBox;
     private javax.swing.JCheckBox pianoCheckBox;
