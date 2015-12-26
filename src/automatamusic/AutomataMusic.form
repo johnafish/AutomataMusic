@@ -203,9 +203,6 @@
       <Properties>
         <Property name="label" type="java.lang.String" value="Piano"/>
       </Properties>
-      <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Piano"/>
-      </AccessibilityProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pianoCheckBoxActionPerformed"/>
       </Events>
@@ -230,6 +227,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Bell"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bellCheckBoxActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="otherCheckBox">
       <Properties>

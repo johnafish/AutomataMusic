@@ -35,6 +35,7 @@ import javax.swing.UIManager;
  */
 public class AutomataMusic extends javax.swing.JFrame {
     private int tempo = 120;
+    private MIDIPlayer md = new MIDIPlayer();
     public int[][] board = getRandomArray(400,400);
     /**
      * Creates new form ScreenView
@@ -132,6 +133,11 @@ public class AutomataMusic extends javax.swing.JFrame {
         });
 
         bellCheckBox.setText("Bell");
+        bellCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bellCheckBoxActionPerformed(evt);
+            }
+        });
 
         otherCheckBox.setText("Other");
 
@@ -231,31 +237,36 @@ public class AutomataMusic extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        pianoCheckBox.getAccessibleContext().setAccessibleName("Piano");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void pianoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pianoCheckBoxActionPerformed
-        // TODO add your handling code here:
+        md.addInstrument("Piano");
     }//GEN-LAST:event_pianoCheckBoxActionPerformed
 
     private void guitarCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guitarCheckBoxActionPerformed
-        // TODO add your handling code here:
+        md.addInstrument("Guitar");
     }//GEN-LAST:event_guitarCheckBoxActionPerformed
 
     private void snareCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snareCheckBoxActionPerformed
-        // TODO add your handling code here:
+        md.addInstrument("Drum");
     }//GEN-LAST:event_snareCheckBoxActionPerformed
 
     private void tempoSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tempoSliderStateChanged
         this.tempo = tempoSlider.getValue();
+        md.setTempo(tempo);
         tempoValue.setText(Integer.toString(tempo));
     }//GEN-LAST:event_tempoSliderStateChanged
 
     private void otherInstrumentTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherInstrumentTextFieldActionPerformed
-        // TODO add your handling code here:
+        Instrument other = new Instrument("Other", Integer.parseInt(otherInstrumentTextField.getText()), 4);
+        md.createInstrument(other);
+        md.addInstrument("Other");
     }//GEN-LAST:event_otherInstrumentTextFieldActionPerformed
+
+    private void bellCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bellCheckBoxActionPerformed
+        md.addInstrument("Bell");
+    }//GEN-LAST:event_bellCheckBoxActionPerformed
     public static int[][] getRandomArray(int width, int height){
         int board[][] = new int[width][height];
         Random rand = new Random();
@@ -286,6 +297,8 @@ public class AutomataMusic extends javax.swing.JFrame {
         this.board = GOL.nextFrame(board);
         BufferedImage img = arrayToImage(board);
         g.drawImage(img, 0, 0, rootPane);
+        int[] boxed = boxify(10,collapse(board));
+        md.playFrame(boxed);
     }
     public static int[] collapse(int[][] arr){
         int[] returnable = new int[arr.length];
@@ -297,6 +310,18 @@ public class AutomataMusic extends javax.swing.JFrame {
             returnable[i] = column;
         }
         return returnable;
+    }
+    
+    public static int[] boxify(int numBoxes, int[] arr){
+        int arrayLength = arr.length;
+        int[] finalArray = new int[numBoxes];
+        int step = arrayLength/numBoxes;
+        for (int i = 0; i < numBoxes; i++) {
+            for (int j = i*step; j < (i+1)*step; j++) {
+                finalArray[i]+=arr[j];
+            }
+        }
+        return finalArray;
     }
     /**
      * @param args the command line arguments
@@ -315,7 +340,6 @@ public class AutomataMusic extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 sv.setVisible(true);
-                
             }
         });
         
