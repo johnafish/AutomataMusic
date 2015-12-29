@@ -40,6 +40,7 @@ public class MIDIPlayer {
         }
         this.initInstruments();
         this.setTempo(120);
+        this.addInstrument("Piano");
     }
     
     public void initInstruments(){
@@ -55,6 +56,12 @@ public class MIDIPlayer {
     }
     public void addInstrument(String ins){
         this.activeInstruments.add(this.possibleInstruments.get(ins));
+    }
+    public void removeInstrument(String ins){
+        this.activeInstruments.remove(this.possibleInstruments.get(ins));
+    }
+    public boolean isActive(String ins){
+        return this.activeInstruments.contains(this.possibleInstruments.get(ins));
     }
     public void createInstrument(Instrument ins){
         this.possibleInstruments.put(ins.name, ins);

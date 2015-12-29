@@ -111,6 +111,7 @@ public class AutomataMusic extends javax.swing.JFrame {
 
         instrumentLabel.setText("Instruments");
 
+        pianoCheckBox.setSelected(true);
         pianoCheckBox.setLabel("Piano");
         pianoCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -246,15 +247,28 @@ public class AutomataMusic extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pianoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pianoCheckBoxActionPerformed
-        md.addInstrument("Piano");
+        if (md.isActive("Piano")){
+            md.removeInstrument("Piano");
+        } else {
+            md.addInstrument("Piano");
+        }
+        
     }//GEN-LAST:event_pianoCheckBoxActionPerformed
 
     private void guitarCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guitarCheckBoxActionPerformed
-        md.addInstrument("Guitar");
+        if (md.isActive("Guitar")){
+            md.removeInstrument("Guitar");
+        } else {
+            md.addInstrument("Guitar");
+        }
     }//GEN-LAST:event_guitarCheckBoxActionPerformed
 
     private void snareCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snareCheckBoxActionPerformed
-        md.addInstrument("Drum");
+        if (md.isActive("Drum")){
+            md.removeInstrument("Drum");
+        } else {
+            md.addInstrument("Drum");
+        }
     }//GEN-LAST:event_snareCheckBoxActionPerformed
 
     private void tempoSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tempoSliderStateChanged
@@ -270,8 +284,11 @@ public class AutomataMusic extends javax.swing.JFrame {
     }//GEN-LAST:event_otherInstrumentTextFieldActionPerformed
 
     private void bellCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bellCheckBoxActionPerformed
-        md.addInstrument("Bell");
-    }//GEN-LAST:event_bellCheckBoxActionPerformed
+        if (md.isActive("Bell")){
+            md.removeInstrument("Bell");
+        } else {
+            md.addInstrument("Bell");
+        }    }//GEN-LAST:event_bellCheckBoxActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         this.board = getRandomArray(400,400);
@@ -351,7 +368,6 @@ public class AutomataMusic extends javax.swing.JFrame {
                 sv.setVisible(true);
             }
         });
-        
         while(true){
             try{
                 sv.nextFrame();
