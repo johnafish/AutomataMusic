@@ -74,7 +74,9 @@ public class MIDIPlayer {
                 mm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 0, 0);
                 t.add(new MidiEvent(mm,(long)0));
                 
+            int counter = 0;
             for(Instrument ins : this.activeInstruments){
+                
                 //Changes the instrument??
                 mm = new ShortMessage();
                 mm.setMessage(ShortMessage.PROGRAM_CHANGE, ins.channel, ins.ID, 0);
@@ -82,13 +84,15 @@ public class MIDIPlayer {
                 
                 //Sets the note on
                 mm = new ShortMessage();
-                mm.setMessage(ShortMessage.NOTE_ON, ins.channel, 60, 50);
+                mm.setMessage(ShortMessage.NOTE_ON, ins.channel, boxes[counter]%127, 50);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()));
                 
                 //Sets the note off
                 mm = new ShortMessage();
-                mm.setMessage(ShortMessage.NOTE_OFF, ins.channel, 60, 50);
+                mm.setMessage(ShortMessage.NOTE_OFF, ins.channel, boxes[counter]%127, 50);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()+1));
+                
+                counter++;
             }
             seq = MidiSystem.getSequencer();
             seq.open();

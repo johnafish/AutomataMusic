@@ -297,7 +297,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         this.board = GOL.nextFrame(board);
         BufferedImage img = arrayToImage(board);
         g.drawImage(img, 0, 0, rootPane);
-        int[] boxed = boxify(10,collapse(board));
+        int[] boxed = boxify(md.activeInstruments.size(),collapse(board));
         md.playFrame(boxed);
     }
     public static int[] collapse(int[][] arr){
