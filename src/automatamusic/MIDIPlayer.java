@@ -43,8 +43,8 @@ public class MIDIPlayer {
     }
     
     public void initInstruments(){
-        Instrument piano = new Instrument("Piano", 0, 2);
-        Instrument guitar = new Instrument("Guitar", 27,2);
+        Instrument piano = new Instrument("Piano", 0, 0);
+        Instrument guitar = new Instrument("Guitar", 27,1);
         Instrument drum = new Instrument("Drum", 37, 9);
         Instrument bell = new Instrument("Bell", 112, 2);
         Instrument[] initial = {piano, guitar, drum, bell};
@@ -75,17 +75,19 @@ public class MIDIPlayer {
                 t.add(new MidiEvent(mm,(long)0));
                 
             for(Instrument ins : this.activeInstruments){
-                
+                //Changes the instrument??
                 mm = new ShortMessage();
-                mm.setMessage(ShortMessage.PROGRAM_CHANGE, ins.channel, ins.ID, 93);
+                mm.setMessage(ShortMessage.PROGRAM_CHANGE, ins.channel, ins.ID, 0);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()));
                 
+                //Sets the note on
                 mm = new ShortMessage();
-                mm.setMessage(144, ins.ID, 32);
+                mm.setMessage(ShortMessage.NOTE_ON, ins.channel, 60, 50);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()));
-
+                
+                //Sets the note off
                 mm = new ShortMessage();
-                mm.setMessage(128,ins.ID,32);
+                mm.setMessage(ShortMessage.NOTE_OFF, ins.channel, 60, 50);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()+1));
             }
             seq = MidiSystem.getSequencer();
