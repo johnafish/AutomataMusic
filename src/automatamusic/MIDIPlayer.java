@@ -73,7 +73,6 @@ public class MIDIPlayer {
     public int scale (int val){
         double max = (double)(400/this.activeInstruments.size())*400*255;
         double ratio = (double) val/max;
-        System.out.println(ratio);
         double value = 50+(128-50)*ratio;
         return (int) Math.round(value);
     }
