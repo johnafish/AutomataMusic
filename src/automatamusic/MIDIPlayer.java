@@ -45,8 +45,8 @@ public class MIDIPlayer {
     
     public void initInstruments(){
         Instrument piano = new Instrument("Piano", 0, 0);
-        Instrument guitar = new Instrument("Guitar", 27,1);
-        Instrument drum = new Instrument("Drum", 37, 9);
+        Instrument guitar = new Instrument("Guitar", 28,1);
+        Instrument drum = new Instrument("Drum", 34, 9);
         Instrument bell = new Instrument("Bell", 112, 2);
         Instrument[] initial = {piano, guitar, drum, bell};
         
@@ -70,7 +70,13 @@ public class MIDIPlayer {
         this.tempo = t;
         seq.setTempoInBPM(t);
     }
-    
+    public int scale (int val){
+        double max = (double)(400/this.activeInstruments.size())*400*255;
+        double ratio = (double) val/max;
+        System.out.println(ratio);
+        double value = 50+(128-50)*ratio;
+        return (int) Math.round(value);
+    }
     public void playFrame(int[] boxes){
         try {
                 seq.close();
@@ -91,12 +97,12 @@ public class MIDIPlayer {
                 
                 //Sets the note on
                 mm = new ShortMessage();
-                mm.setMessage(ShortMessage.NOTE_ON, ins.channel, boxes[counter]%127, 50);
+                mm.setMessage(ShortMessage.NOTE_ON, ins.channel, scale(boxes[counter]), 50);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()));
                 
                 //Sets the note off
                 mm = new ShortMessage();
-                mm.setMessage(ShortMessage.NOTE_OFF, ins.channel, boxes[counter]%127, 50);
+                mm.setMessage(ShortMessage.NOTE_OFF, ins.channel, scale(boxes[counter]), 50);
                 t.add(new MidiEvent(mm,(long)seq.getTickPosition()+1));
                 
                 counter++;
