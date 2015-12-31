@@ -9,6 +9,8 @@ import javax.sound.midi.*;
 /**
  *
  * @author John Fish <john@johnafish.ca>
+ * 
+ * TODO: Turn into Synthesizer instead of Sequencer
  */
 public class MIDIPlayer {
     public int tempo;
