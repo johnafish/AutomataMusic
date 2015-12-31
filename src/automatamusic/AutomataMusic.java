@@ -37,8 +37,9 @@ import javax.swing.UIManager;
  */
 public class AutomataMusic extends javax.swing.JFrame {
     private int tempo = 120;
+    private int numFrames = 50;
     private MIDIPlayer md = new MIDIPlayer();
-    public int[][] board = getRandomArray(1,8);
+    public int[][] board = getRandomArray(5,8);
     /**
      * Creates new form ScreenView
      */
@@ -381,14 +382,13 @@ public class AutomataMusic extends javax.swing.JFrame {
         return img;
     }
     public static BufferedImage scale(BufferedImage image, int scalingFactor){
-
         AffineTransform scaleTransform = AffineTransform.getScaleInstance(scalingFactor, scalingFactor);
         AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-
         return bilinearScaleOp.filter(
             image,
             new BufferedImage(image.getWidth()*scalingFactor, image.getHeight()*scalingFactor, image.getType()));
     }
+    
     public static void sleep(int millis) throws InterruptedException{
         Thread.sleep(millis);
     }
@@ -396,7 +396,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         Graphics g = visualizationPanel.getGraphics();
         BufferedImage img = arrayToImage(board);
         g.drawImage(scale(img,15), 0, 0, rootPane);
-        this.board = getRandomArray(1,8);
+        this.board = getRandomArray(45,8);
 //        this.board = GOL.nextFrame(board);
     }
     public static int[] collapse(int[][] arr){
