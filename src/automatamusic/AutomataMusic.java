@@ -37,9 +37,11 @@ import javax.swing.UIManager;
  */
 public class AutomataMusic extends javax.swing.JFrame {
     private int tempo = 120;
-    private int numFrames = 50;
+    private int numFrames = 45;
+    public static int GOLSize = 16;
     private MIDIPlayer md = new MIDIPlayer();
-    public int[][] board = getRandomArray(5,8);
+    public int[][] board = getRandomArray(GOLSize, GOLSize);
+    public int[][] slices = new int[numFrames][8];
     /**
      * Creates new form ScreenView
      */
@@ -354,12 +356,18 @@ public class AutomataMusic extends javax.swing.JFrame {
     }//GEN-LAST:event_volumeSliderStateChanged
 
     private void randomizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_randomizeButtonActionPerformed
-        // TODO add your handling code here:
+        this.board = getRandomArray(GOLSize, GOLSize);
+        this.generateFrames();
     }//GEN-LAST:event_randomizeButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_playButtonActionPerformed
+    
+    public static void sleep(int millis) throws InterruptedException{
+        Thread.sleep(millis);
+    }
+    
     public static int[][] getRandomArray(int width, int height){
         int board[][] = new int[width][height];
         Random rand = new Random();
@@ -370,6 +378,41 @@ public class AutomataMusic extends javax.swing.JFrame {
         }
         return board;
     }
+    
+    public static int[] boxify(int numBoxes, int[] arr){
+        int arrayLength = arr.length;
+        int[] finalArray = new int[numBoxes];
+        int step = arrayLength/numBoxes;
+
+        for (int i = 0; i < numBoxes; i++) {
+            int steps = 0;
+            for (int j = i*step; j < (i+1)*step; j++) {
+                finalArray[i]+=arr[j];
+                steps++;
+            }
+            finalArray[i]/=steps;
+        }
+        return finalArray;
+    }
+    public static int[] binarize(int[] arr){
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i]>128) arr[i]=255;
+            else arr[i]=0;
+        }
+        return arr;
+    }
+    public static int[] collapse(int[][] arr){
+        int[] returnable = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            int column = 0;
+            for (int j = 0; j < arr.length; j++) {
+                column+=arr[i][j];
+            }
+            returnable[i] = column/arr.length;
+        }
+        return returnable;
+    }
+    
     public static BufferedImage arrayToImage(int[][] array){
         BufferedImage img = new BufferedImage(array.length, array[0].length, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < array.length; i++) {
@@ -381,6 +424,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         }
         return img;
     }
+    
     public static BufferedImage scale(BufferedImage image, int scalingFactor){
         AffineTransform scaleTransform = AffineTransform.getScaleInstance(scalingFactor, scalingFactor);
         AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -389,39 +433,23 @@ public class AutomataMusic extends javax.swing.JFrame {
             new BufferedImage(image.getWidth()*scalingFactor, image.getHeight()*scalingFactor, image.getType()));
     }
     
-    public static void sleep(int millis) throws InterruptedException{
-        Thread.sleep(millis);
-    }
+    
     public void nextFrame(){
         Graphics g = visualizationPanel.getGraphics();
-        BufferedImage img = arrayToImage(board);
+        BufferedImage img = arrayToImage(slices);
         g.drawImage(scale(img,15), 0, 0, rootPane);
-        this.board = getRandomArray(45,8);
 //        this.board = GOL.nextFrame(board);
     }
-    public static int[] collapse(int[][] arr){
-        int[] returnable = new int[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            int column = 0;
-            for (int j = 0; j < arr.length; j++) {
-                column+=arr[i][j];
-            }
-            returnable[i] = column;
+    
+    public void generateFrames(){
+        for (int i = 0; i < numFrames; i++) {
+            int[] collapsed = collapse(this.board);
+            int[] boxed = boxify(8,collapsed);
+            slices[i] = boxed;
+            this.board = GOL.nextFrame(this.board);
         }
-        return returnable;
     }
     
-    public static int[] boxify(int numBoxes, int[] arr){
-        int arrayLength = arr.length;
-        int[] finalArray = new int[numBoxes];
-        int step = arrayLength/numBoxes;
-        for (int i = 0; i < numBoxes; i++) {
-            for (int j = i*step; j < (i+1)*step; j++) {
-                finalArray[i]+=arr[j];
-            }
-        }
-        return finalArray;
-    }
     /**
      * @param args the command line arguments
      */
@@ -434,7 +462,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         }
         
         AutomataMusic sv = new AutomataMusic();
-        /* Create and display the form */
+        sv.generateFrames();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 sv.setVisible(true);

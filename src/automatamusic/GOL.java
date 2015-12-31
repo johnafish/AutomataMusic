@@ -5,8 +5,8 @@ package automatamusic;
  * @author John Fish <john@johnafish.ca>
  */
 public class GOL {
-    public static int width=400;
-    public static int height = 400;
+    public static int width=AutomataMusic.GOLSize;
+    public static int height= AutomataMusic.GOLSize;
     
     public static int countNeighbours(int x, int y, int[][] board){
         int neighbours=0;
