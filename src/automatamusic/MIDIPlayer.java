@@ -4,73 +4,48 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import javax.sound.midi.*;
 
 /**
  *
  * @author John Fish <john@johnafish.ca>
  * 
- * TODO: Turn into Synthesizer instead of Sequencer
  */
 public class MIDIPlayer {
     public int tempo;
-    public List<Instrument> activeInstruments;
-    public Map<String, Instrument> possibleInstruments;
-    public Sequence s;
-    public Sequencer seq;
-    public Track t;
-    public ShortMessage mm;
+    public List<Integer> activeInstruments;
+    public int volume;
+    private Synthesizer synth;
+    private Soundbank sb;
+    private Instrument[] possibleInstruments;
     
     public MIDIPlayer(){
-        
-        this.activeInstruments = new ArrayList<Instrument>();
-        this.possibleInstruments = new HashMap<String,Instrument>();
-        try{
-            this.s = new Sequence(javax.sound.midi.Sequence.PPQ,24);
-            this.t = s.createTrack();
-            
-            mm = new ShortMessage();
-            mm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 0, 0);
-            t.add(new MidiEvent(mm,(long)0));
-
-            seq = MidiSystem.getSequencer();
-            seq.open();
-            seq.setSequence(s);
-            seq.start();
+        this.tempo = 120;
+        this.volume = 127;
+        this.activeInstruments = new ArrayList<Integer>();
+        try {
+            this.synth = MidiSystem.getSynthesizer();
+            this.synth.open();
+            this.sb = synth.getDefaultSoundbank();
+            this.possibleInstruments = sb.getInstruments();
         } catch (Exception e){
-            System.out.println(e+" in initializing.");
+            e.printStackTrace();
         }
-        this.initInstruments();
-        this.setTempo(120);
-        this.addInstrument("Piano");
-    }
-    
-    public void initInstruments(){
-        Instrument piano = new Instrument("Piano", 0, 0);
-        Instrument guitar = new Instrument("Guitar", 28,1);
-        Instrument drum = new Instrument("Drum", 34, 9);
-        Instrument bell = new Instrument("Bell", 112, 2);
-        Instrument[] initial = {piano, guitar, drum, bell};
         
-        for (Instrument ins : initial) {
-            createInstrument(ins);
-        }
     }
-    public void addInstrument(String ins){
-        this.activeInstruments.add(this.possibleInstruments.get(ins));
+    public boolean isActive(int id){
+        return activeInstruments.contains(id);
     }
-    public void removeInstrument(String ins){
-        this.activeInstruments.remove(this.possibleInstruments.get(ins));
+    public void addInstrument(int id){
+        this.activeInstruments.add(id);
     }
-    public boolean isActive(String ins){
-        return this.activeInstruments.contains(this.possibleInstruments.get(ins));
+    public void removeInstrument(int id){
+        this.activeInstruments.remove(id);
     }
-    public void createInstrument(Instrument ins){
-        this.possibleInstruments.put(ins.name, ins);
-    }
+
     public void setTempo(int t){
         this.tempo = t;
-        seq.setTempoInBPM(t);
     }
     public int scale (int val){
         double max = (double)(400/this.activeInstruments.size())*400*255;
@@ -78,43 +53,31 @@ public class MIDIPlayer {
         double value = 50+(128-50)*ratio;
         return (int) Math.round(value);
     }
-    public void playFrame(int[] boxes){
-        try {
-                seq.close();
-                this.s = new Sequence(javax.sound.midi.Sequence.PPQ,24);
-                this.t = s.createTrack();
-
-                mm = new ShortMessage();
-                mm.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 0, 0);
-                t.add(new MidiEvent(mm,(long)0));
-                
-            int counter = 0;
-            for(Instrument ins : this.activeInstruments){
-                
-                //Changes the instrument??
-                mm = new ShortMessage();
-                mm.setMessage(ShortMessage.PROGRAM_CHANGE, ins.channel, ins.ID, 0);
-                t.add(new MidiEvent(mm,(long)seq.getTickPosition()));
-                
-                //Sets the note on
-                mm = new ShortMessage();
-                mm.setMessage(ShortMessage.NOTE_ON, ins.channel, scale(boxes[counter]), 50);
-                t.add(new MidiEvent(mm,(long)seq.getTickPosition()));
-                
-                //Sets the note off
-                mm = new ShortMessage();
-                mm.setMessage(ShortMessage.NOTE_OFF, ins.channel, scale(boxes[counter]), 50);
-                t.add(new MidiEvent(mm,(long)seq.getTickPosition()+1));
-                
-                counter++;
+    public void playFrames(int[][] slices){
+        Random rand = new Random();
+        MidiChannel[] channels = this.synth.getChannels();
+        int[] assignedNotes = new int[slices[0].length];
+        int[] assignedInstruments = new int[slices[0].length];
+        for (int i = 0; i < assignedNotes.length; i++) {
+            assignedNotes[i]=rand.nextInt(80)+27;
+            assignedInstruments[i]=rand.nextInt(127);
+        }
+        try{
+        for (int i = 0; i < slices.length; i++) {
+            for (int j = 0; j < slices[0].length; j++) {
+                channels[j+2].programChange(possibleInstruments[assignedInstruments[j]].getPatch().getProgram());
+                channels[j+2].noteOn( assignedNotes[j], slices[i][j]/2 );
+                channels[j+2].setChannelPressure(slices[i][j]/2);  
             }
-            seq = MidiSystem.getSequencer();
-            seq.open();
-            seq.setSequence(s);
-            seq.start();
-	}
-        catch(Exception e) {
-            System.out.println("Exception caught " + e.toString());
-	}
+            Thread.sleep(60000/this.tempo);
+           
+            for (int j = 0; j < channels.length; j++) {
+                MidiChannel channel = channels[j];
+                channel.allNotesOff();
+            }
+        }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
