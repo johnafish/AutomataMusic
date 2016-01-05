@@ -4,11 +4,9 @@ package automatamusic;
  *
  * @author John Fish <john@johnafish.ca>
  */
-public class GOL {
-    public static int width=400;
-    public static int height = 400;
-    
-    public static int countNeighbours(int x, int y, int[][] board){
+public class GOL implements CellularAutomaton {
+
+    public int countNeighbours(int x, int y, int[][] board){
         int neighbours=0;
         //Use a for loop to go through the square around cell (x,y)
         for (int i = -1; i <= 1; i++) {
@@ -29,7 +27,7 @@ public class GOL {
         return neighbours;
     }
     
-    public static int[][] nextFrame(int[][] previousFrame){
+    public int[][] nextFrame(int[][] previousFrame){
         int[][] cellsOnNext = new int[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
