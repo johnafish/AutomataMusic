@@ -38,10 +38,10 @@ import javax.swing.UIManager;
 public class AutomataMusic extends javax.swing.JFrame {
     private int tempo = 120;
     private int numFrames = 45;
-    public static int GOLSize = 16;
+    public static int automatonSize = 16;
     private MIDIPlayer md = new MIDIPlayer();
-    public int[][] board = getRandomArray(GOLSize, GOLSize);
-    public int[][] slices = new int[numFrames][8];
+    public int[][] board = getRandomArray(automatonSize, automatonSize);
+    public int[][] score = new int[numFrames][8];
     /**
      * Creates new form ScreenView
      */
@@ -354,12 +354,12 @@ public class AutomataMusic extends javax.swing.JFrame {
     }//GEN-LAST:event_volumeSliderStateChanged
 
     private void randomizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_randomizeButtonActionPerformed
-        this.board = getRandomArray(GOLSize, GOLSize);
+        this.board = getRandomArray(automatonSize, automatonSize);
         this.generateFrames();
     }//GEN-LAST:event_randomizeButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        md.playFrames(slices);
+        md.playFrames(score);
     }//GEN-LAST:event_playButtonActionPerformed
     
     public static void sleep(int millis) throws InterruptedException{
@@ -391,13 +391,6 @@ public class AutomataMusic extends javax.swing.JFrame {
             finalArray[i]/=steps;
         }
         return finalArray;
-    }
-    public static int[] binarize(int[] arr){
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i]>128) arr[i]=255;
-            else arr[i]=0;
-        }
-        return arr;
     }
     public static int[] collapse(int[][] arr){
         int[] returnable = new int[arr.length];
@@ -434,17 +427,18 @@ public class AutomataMusic extends javax.swing.JFrame {
     
     public void nextFrame(){
         Graphics g = visualizationPanel.getGraphics();
-        BufferedImage img = arrayToImage(slices);
+        BufferedImage img = arrayToImage(score);
         g.drawImage(scale(img,15), 0, 0, rootPane);
 //        this.board = GOL.nextFrame(board);
     }
     
     public void generateFrames(){
+        GOL gl = new GOL();
         for (int i = 0; i < numFrames; i++) {
             int[] collapsed = collapse(this.board);
             int[] boxed = boxify(8,collapsed);
-            slices[i] = boxed;
-            this.board = GOL.nextFrame(this.board);
+            score[i] = boxed;
+            this.board = gl.nextFrame(this.board);
         }
     }
     

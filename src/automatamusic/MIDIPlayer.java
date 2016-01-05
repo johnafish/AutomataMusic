@@ -15,14 +15,12 @@ import javax.sound.midi.*;
 public class MIDIPlayer {
     public int tempo;
     public List<Integer> activeInstruments;
-    public int volume;
     private Synthesizer synth;
     private Soundbank sb;
     private Instrument[] possibleInstruments;
     
     public MIDIPlayer(){
         this.tempo = 120;
-        this.volume = 127;
         this.activeInstruments = new ArrayList<Integer>();
         try {
             this.synth = MidiSystem.getSynthesizer();
@@ -46,12 +44,6 @@ public class MIDIPlayer {
 
     public void setTempo(int t){
         this.tempo = t;
-    }
-    public int scale (int val){
-        double max = (double)(400/this.activeInstruments.size())*400*255;
-        double ratio = (double) val/max;
-        double value = 50+(128-50)*ratio;
-        return (int) Math.round(value);
     }
     public void playFrames(int[][] slices){
         Random rand = new Random();
