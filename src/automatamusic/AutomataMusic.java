@@ -333,7 +333,7 @@ public class AutomataMusic extends javax.swing.JFrame {
             for (int j = 0; j < arr.length; j++) {
                 column+=arr[i][j];
             }
-            returnable[i] = column;
+            returnable[i] = column/arr.length;
         }
         return returnable;
     }
@@ -343,9 +343,11 @@ public class AutomataMusic extends javax.swing.JFrame {
         int[] finalArray = new int[numBoxes];
         int step = arrayLength/numBoxes;
         for (int i = 0; i < numBoxes; i++) {
-            for (int j = i*step; j < (i+1)*step; j++) {
+            int j;
+            for (j=i*step; j < (i+1)*step; j++) {
                 finalArray[i]+=arr[j];
             }
+            finalArray[i]=finalArray[i]/j;
         }
         return finalArray;
     }
