@@ -399,11 +399,12 @@ public class AutomataMusic extends javax.swing.JFrame {
             for (int j = 0; j < arr.length; j++) {
                 column+=arr[i][j];
             }
-            returnable[i] = column/arr.length;
+            returnable[i] = column;
         }
         return returnable;
     }
     
+<<<<<<< HEAD
     public static BufferedImage arrayToImage(int[][] array){
         BufferedImage img = new BufferedImage(array.length, array[0].length, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < array.length; i++) {
@@ -411,6 +412,15 @@ public class AutomataMusic extends javax.swing.JFrame {
                 int gray = 255-array[i][j];
                 Color col = new Color(gray,gray,gray);
                 img.setRGB(i, j, col.getRGB());
+=======
+    public static int[] boxify(int numBoxes, int[] arr){
+        int arrayLength = arr.length;
+        int[] finalArray = new int[numBoxes];
+        int step = arrayLength/numBoxes;
+        for (int i = 0; i < numBoxes; i++) {
+            for (int j = i*step; j < (i+1)*step; j++) {
+                finalArray[i]+=arr[j];
+>>>>>>> parent of b13d23d... CellularAutomaton becomes Interface
             }
         }
         return img;
