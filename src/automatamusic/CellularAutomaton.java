@@ -7,5 +7,6 @@ package automatamusic;
 public interface CellularAutomaton {
     int width = AutomataMusic.automatonSize;
     int height = AutomataMusic.automatonSize;
-    int[][] nextFrame(int[][] previousFrame);
+    int[][] nextFrame();
+    int[][] initializeFrame();
 }

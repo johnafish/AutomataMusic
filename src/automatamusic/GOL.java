@@ -1,11 +1,13 @@
 package automatamusic;
 
+import java.util.Random;
+
 /**
  *
  * @author John Fish <john@johnafish.ca>
  */
 public class GOL implements CellularAutomaton {
-
+    int[][] previousFrame = new int[width][height];
     public int countNeighbours(int x, int y, int[][] board){
         int neighbours=0;
         //Use a for loop to go through the square around cell (x,y)
@@ -26,8 +28,16 @@ public class GOL implements CellularAutomaton {
         }
         return neighbours;
     }
-    
-    public int[][] nextFrame(int[][] previousFrame){
+    public int[][] initializeFrame(){
+        Random rand = new Random();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                previousFrame[i][j] = rand.nextInt(2)*255;
+            }
+        }
+        return previousFrame;
+    }
+    public int[][] nextFrame(){
         int[][] cellsOnNext = new int[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -55,6 +65,7 @@ public class GOL implements CellularAutomaton {
                 }
             }
         }
+        previousFrame = cellsOnNext;
         return cellsOnNext;
     }
 }

@@ -42,6 +42,7 @@ public class AutomataMusic extends javax.swing.JFrame {
     private MIDIPlayer md = new MIDIPlayer();
     public int[][] board = getRandomArray(automatonSize, automatonSize);
     public int[][] score = new int[numFrames][8];
+    public String chosenSim = "Game of Life";
     /**
      * Creates new form ScreenView
      */
@@ -148,7 +149,12 @@ public class AutomataMusic extends javax.swing.JFrame {
 
         visualizationLabel.setText("Simulation");
 
-        visualizationChoice.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Game of Life", "Reaction Diffusion", "Pollution Simulation" }));
+        visualizationChoice.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Game of Life", "Reaction Diffusion", "Static" }));
+        visualizationChoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                visualizationChoiceActionPerformed(evt);
+            }
+        });
 
         generateButton.setText("Generate");
         generateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -361,6 +367,11 @@ public class AutomataMusic extends javax.swing.JFrame {
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         md.playFrames(score);
     }//GEN-LAST:event_playButtonActionPerformed
+
+    private void visualizationChoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizationChoiceActionPerformed
+        this.chosenSim = visualizationChoice.getSelectedItem().toString();
+        this.generateFrames();
+    }//GEN-LAST:event_visualizationChoiceActionPerformed
     
     public static void sleep(int millis) throws InterruptedException{
         Thread.sleep(millis);
@@ -433,12 +444,23 @@ public class AutomataMusic extends javax.swing.JFrame {
     }
     
     public void generateFrames(){
-        GOL gl = new GOL();
+        CellularAutomaton gl;
+        if (chosenSim.equalsIgnoreCase("Game of Life")){
+            gl = new GOL();
+        } else if (chosenSim.equalsIgnoreCase("Reaction Diffusion")){
+            gl = new ReactionDiffusion();
+        } else {
+            gl = new Static();
+        }
+        
+        this.board = gl.initializeFrame();
         for (int i = 0; i < numFrames; i++) {
+            
             int[] collapsed = collapse(this.board);
             int[] boxed = boxify(8,collapsed);
             score[i] = boxed;
-            this.board = gl.nextFrame(this.board);
+            this.board = gl.nextFrame();
+            
         }
     }
     

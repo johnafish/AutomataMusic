@@ -5,7 +5,9 @@
         <group>
             <file>file:/Users/johnafish/Documents/Code/AutomataMusic/src/automatamusic/GOL.java</file>
             <file>file:/Users/johnafish/Documents/Code/AutomataMusic/src/automatamusic/AutomataMusic.java</file>
+            <file>file:/Users/johnafish/Documents/Code/AutomataMusic/src/automatamusic/CellularAutomaton.java</file>
             <file>file:/Users/johnafish/Documents/Code/AutomataMusic/src/automatamusic/MIDIPlayer.java</file>
+            <file>file:/Users/johnafish/Documents/Code/AutomataMusic/src/automatamusic/ReactionDiffusion.java</file>
         </group>
     </open-files>
 </project-private>

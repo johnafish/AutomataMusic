@@ -260,10 +260,13 @@
           <StringArray count="3">
             <StringItem index="0" value="Game of Life"/>
             <StringItem index="1" value="Reaction Diffusion"/>
-            <StringItem index="2" value="Pollution Simulation"/>
+            <StringItem index="2" value="Static"/>
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="visualizationChoiceActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="generateButton">
       <Properties>
