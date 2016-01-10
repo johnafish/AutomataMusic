@@ -51,15 +51,14 @@ public class MIDIPlayer {
         int[] assignedNotes = new int[slices[0].length];
         int[] assignedInstruments = new int[slices[0].length];
         for (int i = 0; i < assignedNotes.length; i++) {
-            assignedNotes[i]=rand.nextInt(80)+27;
-            assignedInstruments[i]=rand.nextInt(127);
+            assignedNotes[i]=rand.nextInt(35)+48;
+            assignedInstruments[i]=rand.nextInt(128);
         }
         try{
         for (int i = 0; i < slices.length; i++) {
             for (int j = 0; j < slices[0].length; j++) {
                 channels[j+2].programChange(possibleInstruments[assignedInstruments[j]].getPatch().getProgram());
                 channels[j+2].noteOn( assignedNotes[j], slices[i][j]/2 );
-                channels[j+2].setChannelPressure(slices[i][j]/2);  
             }
             Thread.sleep(60000/this.tempo);
            
