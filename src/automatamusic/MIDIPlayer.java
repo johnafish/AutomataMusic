@@ -12,15 +12,17 @@ import javax.sound.midi.*;
  * @author John Fish <john@johnafish.ca>
  * 
  */
-public class MIDIPlayer {
+public class MIDIPlayer implements Runnable{
     public int tempo;
+    public int[][] slices;
     public List<Integer> activeInstruments;
     private Synthesizer synth;
     private Soundbank sb;
     private Instrument[] possibleInstruments;
     
-    public MIDIPlayer(){
-        this.tempo = 120;
+    public MIDIPlayer(int t, int[][] score){
+        this.slices = score;
+        this.tempo = t;
         this.activeInstruments = new ArrayList<Integer>();
         try {
             this.synth = MidiSystem.getSynthesizer();
@@ -45,7 +47,7 @@ public class MIDIPlayer {
     public void setTempo(int t){
         this.tempo = t;
     }
-    public void playFrames(int[][] slices){
+    public void playFrames(){
         Random rand = new Random();
         MidiChannel[] channels = this.synth.getChannels();
         int[] assignedNotes = new int[slices[0].length];
@@ -68,7 +70,15 @@ public class MIDIPlayer {
             }
         }
         } catch (Exception e){
-            e.printStackTrace();
+            for (int j = 0; j < channels.length; j++) {
+                MidiChannel channel = channels[j];
+                channel.allNotesOff();
+            }
         }
+    }
+
+    @Override
+    public void run() {
+            this.playFrames();
     }
 }

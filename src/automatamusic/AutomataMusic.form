@@ -64,7 +64,12 @@
                                   </Group>
                                   <Component id="visualizationChoice" min="-2" max="-2" attributes="0"/>
                                   <Component id="visualizationLabel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="playButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="playButton" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="stopButton" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="randomizeButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
@@ -76,7 +81,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="tempoSlider" min="-2" pref="300" max="-2" attributes="0"/>
                                           <Component id="tempoLabel" min="-2" max="-2" attributes="0"/>
-                                          <Component id="volumeSlider" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
+                                          <Component id="frameSlider" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
                                           <Component id="volumeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -85,11 +90,6 @@
                               </Group>
                           </Group>
                           <Component id="visualizationPanel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="generateButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="randomizeButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -127,7 +127,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="volumeValue" max="32767" attributes="0"/>
-                          <Component id="volumeSlider" max="32767" attributes="0"/>
+                          <Component id="frameSlider" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -151,12 +151,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="visualizationChoice" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="randomizeButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="generateButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="randomizeButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="47" max="32767" attributes="0"/>
-                      <Component id="playButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="playButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="stopButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -268,33 +268,35 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="visualizationChoiceActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="generateButton">
+    <Component class="javax.swing.JButton" name="stopButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Generate"/>
+        <Property name="text" type="java.lang.String" value="Stop"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stopButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="volumeValue">
       <Properties>
-        <Property name="text" type="java.lang.String" value="75"/>
+        <Property name="text" type="java.lang.String" value="45"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSlider" name="volumeSlider">
+    <Component class="javax.swing.JSlider" name="frameSlider">
       <Properties>
+        <Property name="maximum" type="int" value="200"/>
+        <Property name="minimum" type="int" value="1"/>
         <Property name="minorTickSpacing" type="int" value="25"/>
         <Property name="paintLabels" type="boolean" value="true"/>
         <Property name="paintTicks" type="boolean" value="true"/>
-        <Property name="value" type="int" value="75"/>
+        <Property name="value" type="int" value="45"/>
       </Properties>
       <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="volumeSliderStateChanged"/>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="frameSliderStateChanged"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="volumeLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Volume"/>
+        <Property name="text" type="java.lang.String" value="Number of Frames"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="randomizeButton">
@@ -310,12 +312,15 @@
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[675, 120]"/>
+        </Property>
       </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="674" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="675" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
