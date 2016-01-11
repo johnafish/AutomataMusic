@@ -54,7 +54,7 @@ public class ReactionDiffusion implements CellularAutomaton {
         Random rand = new Random();
         f = rand.nextDouble();
         k = rand.nextDouble();
-        int radius = rand.nextInt(9)+10;
+        int radius = rand.nextInt(AutomataMusic.automatonSize/4);
         int midX = width/2;
         int midY = height/2;
         boolean circle = true;

@@ -38,8 +38,9 @@ import javax.swing.UIManager;
 public class AutomataMusic extends javax.swing.JFrame {
     private int tempo = 120;
     private int numFrames = 45;
-    public static int automatonSize = 16;
+    public static int automatonSize = 18;
     public int[][] board = getRandomArray(automatonSize, automatonSize);
+    public int[][][] boards = new int[numFrames][automatonSize][automatonSize];
     public int[][] score = new int[numFrames][8];
     public String chosenSim = "Game of Life";
     public boolean animating = false;
@@ -82,6 +83,8 @@ public class AutomataMusic extends javax.swing.JFrame {
         randomizeButton = new javax.swing.JButton();
         visualizationPanel = new javax.swing.JPanel();
         playButton = new javax.swing.JButton();
+        automataPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -179,7 +182,7 @@ public class AutomataMusic extends javax.swing.JFrame {
             }
         });
 
-        volumeLabel.setText("Number of Frames");
+        volumeLabel.setText("Frames");
 
         randomizeButton.setText("Randomize");
         randomizeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -209,6 +212,21 @@ public class AutomataMusic extends javax.swing.JFrame {
             }
         });
 
+        automataPanel.setPreferredSize(new java.awt.Dimension(180, 180));
+
+        javax.swing.GroupLayout automataPanelLayout = new javax.swing.GroupLayout(automataPanel);
+        automataPanel.setLayout(automataPanelLayout);
+        automataPanelLayout.setHorizontalGroup(
+            automataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 180, Short.MAX_VALUE)
+        );
+        automataPanelLayout.setVerticalGroup(
+            automataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jLabel1.setText("Frame 1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,81 +236,93 @@ public class AutomataMusic extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(visualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(instrumentLabel)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(snareCheckBox)
+                                                    .addComponent(pianoCheckBox))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(guitarCheckBox)
+                                                    .addComponent(bellCheckBox))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(65, 65, 65)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(volumeLabel)
+                                                    .addComponent(tempoLabel))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(236, 236, 236)
+                                                .addComponent(jLabel1))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(otherCheckBox)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(otherInstrumentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(visualizationLabel)
+                                            .addComponent(visualizationChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(randomizeButton)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(playButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(stopButton)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(automataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(instrumentLabel)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(snareCheckBox)
-                                            .addComponent(pianoCheckBox))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(guitarCheckBox)
-                                            .addComponent(bellCheckBox)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(otherCheckBox)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(otherInstrumentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(visualizationChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(visualizationLabel)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(playButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(stopButton))
-                                    .addComponent(randomizeButton))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(415, 415, 415)
-                                        .addComponent(volumeValue))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(97, 97, 97)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tempoLabel)
-                                            .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(volumeLabel))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(tempoValue))))
-                            .addComponent(visualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(tempoValue)
+                                    .addComponent(volumeValue)))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(title)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(title)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(instrumentLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addComponent(tempoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tempoLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(volumeLabel)
+                        .addContainerGap()
+                        .addComponent(title)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(volumeValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(frameSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(instrumentLabel)
+                            .addComponent(tempoLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(pianoCheckBox)
-                            .addComponent(guitarCheckBox))
+                            .addComponent(guitarCheckBox)
+                            .addComponent(volumeLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(snareCheckBox)
-                            .addComponent(bellCheckBox))
+                            .addComponent(bellCheckBox)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(tempoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(volumeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(otherCheckBox)
                             .addComponent(otherInstrumentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -302,11 +332,14 @@ public class AutomataMusic extends javax.swing.JFrame {
                         .addComponent(visualizationChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(randomizeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(playButton)
-                            .addComponent(stopButton))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(stopButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(automataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)))
                 .addComponent(visualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
         );
@@ -348,6 +381,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         volumeValue.setText(Integer.toString(frameSlider.getValue()));
         this.numFrames = frameSlider.getValue();
         this.score = new int[this.numFrames][8];
+        this.boards = new int[this.numFrames][automatonSize][automatonSize];
         this.generateFrames();
     }//GEN-LAST:event_frameSliderStateChanged
 
@@ -439,6 +473,14 @@ public class AutomataMusic extends javax.swing.JFrame {
         g.setColor(gray);
         g.fillRect(0, 0, 675, 120);
         g.drawImage(scale(img,15), -15*i, 0, rootPane);
+        
+        if (i<numFrames){
+            Graphics h = this.automataPanel.getGraphics();
+            BufferedImage b = arrayToImage(boards[i]);
+            h.setColor(gray);
+            h.fillRect(0, 0, 180, 180);
+            h.drawImage(scale(b,(180/automatonSize)), 0, 0, rootPane);
+        }
     }
     
     public void generateFrames(){
@@ -454,7 +496,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         
         this.board = gl.initializeFrame();
         for (int i = 0; i < numFrames; i++) {
-            
+            boards[i]=this.board;
             int[] collapsed = collapse(this.board);
             int[] boxed = boxify(8,collapsed);
             score[i] = boxed;
@@ -486,12 +528,18 @@ public class AutomataMusic extends javax.swing.JFrame {
             if(sv.animating){
                 sv.randomizeButton.setEnabled(false);
                 sv.tempoSlider.setEnabled(false);
+                sv.frameSlider.setEnabled(false);
                 sv.visualizationChoice.setEnabled(false);
+                sv.playButton.setEnabled(false);
+                sv.stopButton.setEnabled(true);
                 sv.frameNo++;
             } else {
                 sv.randomizeButton.setEnabled(true);
                 sv.tempoSlider.setEnabled(true);
+                sv.frameSlider.setEnabled(true);
                 sv.visualizationChoice.setEnabled(true);
+                sv.playButton.setEnabled(true);
+                sv.stopButton.setEnabled(false);
                 sv.frameNo = 0;
             }
             if(sv.frameNo==sv.numFrames){
@@ -508,11 +556,13 @@ public class AutomataMusic extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel automataPanel;
     private javax.swing.JCheckBox bellCheckBox;
     private javax.swing.JSlider frameSlider;
     private javax.swing.JCheckBox guitarCheckBox;
     private javax.swing.JLabel instrumentLabel;
     private javax.swing.JColorChooser jColorChooser1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JCheckBox otherCheckBox;
     private javax.swing.JTextField otherInstrumentTextField;
     private javax.swing.JCheckBox pianoCheckBox;
