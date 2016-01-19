@@ -93,7 +93,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(640, 360));
 
         title.setFont(new java.awt.Font("Arial Narrow", 0, 36)); // NOI18N
-        title.setText("Cellular Music");
+        title.setText("Automusic");
 
         tempoSlider.setMaximum(240);
         tempoSlider.setMinimum(40);
