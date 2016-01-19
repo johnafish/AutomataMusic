@@ -1,51 +1,51 @@
-/*
- * The MIT License
- *
- * Copyright 2015 John Fish <john@johnafish.ca>.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
 package automatamusic;
 
+/**
+ * Imports
+ */
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.UIManager;
 
 /**
- *
  * @author John Fish <john@johnafish.ca>
+ * @version 1.0
+ * @since January 18, 2016
+ * 
+ * Plays "music" from cellular automata, there are four potential automata:
+ * -GOL
+ * -Reaction Diffusion
+ * -Static (Not technically automata)
+ * -Wolfram's Rule 30
  */
+
 public class AutomataMusic extends javax.swing.JFrame {
-    private int tempo = 120;
-    private int numFrames = 45;
+    //Static fields
     public static int automatonSize = 18;
-    public int[][] board = getRandomArray(automatonSize, automatonSize);
+    
+    //Initial form values
+    public int tempo = 80;
+    public int numFrames = 45;
+    public String chosenSim = "Game of Life";
+    
+    //Generated board fields
+    public int[][] board;
     public int[][][] boards = new int[numFrames][automatonSize][automatonSize];
     public int[][] score = new int[numFrames][8];
-    public String chosenSim = "Game of Life";
+    
+    //Musical fields
+    public List<Integer> instruments = new ArrayList();
+    public Thread playThread;
+    
+    //Animation fields
     public boolean animating = false;
     public int frameNo = 0;
-    public Thread playThread;
+    
     /**
      * Creates new form ScreenView
      */
@@ -69,11 +69,9 @@ public class AutomataMusic extends javax.swing.JFrame {
         tempoValue = new javax.swing.JLabel();
         instrumentLabel = new javax.swing.JLabel();
         pianoCheckBox = new javax.swing.JCheckBox();
-        snareCheckBox = new javax.swing.JCheckBox();
+        percussionCheckBox = new javax.swing.JCheckBox();
         guitarCheckBox = new javax.swing.JCheckBox();
-        bellCheckBox = new javax.swing.JCheckBox();
-        otherCheckBox = new javax.swing.JCheckBox();
-        otherInstrumentTextField = new javax.swing.JTextField();
+        brassCheckBox = new javax.swing.JCheckBox();
         visualizationLabel = new javax.swing.JLabel();
         visualizationChoice = new javax.swing.JComboBox();
         stopButton = new javax.swing.JButton();
@@ -85,6 +83,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         playButton = new javax.swing.JButton();
         automataPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        stringsCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -101,7 +100,7 @@ public class AutomataMusic extends javax.swing.JFrame {
         tempoSlider.setMinorTickSpacing(20);
         tempoSlider.setPaintLabels(true);
         tempoSlider.setPaintTicks(true);
-        tempoSlider.setValue(120);
+        tempoSlider.setValue(80);
         tempoSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 tempoSliderStateChanged(evt);
@@ -110,11 +109,10 @@ public class AutomataMusic extends javax.swing.JFrame {
 
         tempoLabel.setText("Tempo");
 
-        tempoValue.setText("120");
+        tempoValue.setText("80");
 
         instrumentLabel.setText("Instruments");
 
-        pianoCheckBox.setSelected(true);
         pianoCheckBox.setLabel("Piano");
         pianoCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,39 +120,30 @@ public class AutomataMusic extends javax.swing.JFrame {
             }
         });
 
-        snareCheckBox.setText("Snare Drum");
-        snareCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        percussionCheckBox.setText("Percussion");
+        percussionCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                snareCheckBoxActionPerformed(evt);
+                percussionCheckBoxActionPerformed(evt);
             }
         });
 
-        guitarCheckBox.setText("Electric Guitar");
+        guitarCheckBox.setText("Guitar");
         guitarCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 guitarCheckBoxActionPerformed(evt);
             }
         });
 
-        bellCheckBox.setText("Bell");
-        bellCheckBox.addActionListener(new java.awt.event.ActionListener() {
+        brassCheckBox.setText("Brass");
+        brassCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bellCheckBoxActionPerformed(evt);
-            }
-        });
-
-        otherCheckBox.setText("Other");
-
-        otherInstrumentTextField.setText("74");
-        otherInstrumentTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                otherInstrumentTextFieldActionPerformed(evt);
+                brassCheckBoxActionPerformed(evt);
             }
         });
 
         visualizationLabel.setText("Simulation");
 
-        visualizationChoice.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Game of Life", "Reaction Diffusion", "Static" }));
+        visualizationChoice.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Game of Life", "Reaction Diffusion", "Static", "Wolfram Rule 30" }));
         visualizationChoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 visualizationChoiceActionPerformed(evt);
@@ -218,127 +207,122 @@ public class AutomataMusic extends javax.swing.JFrame {
         automataPanel.setLayout(automataPanelLayout);
         automataPanelLayout.setHorizontalGroup(
             automataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 180, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
         automataPanelLayout.setVerticalGroup(
             automataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         jLabel1.setText("Frame 1");
+
+        stringsCheckBox.setText("Strings");
+        stringsCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stringsCheckBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(visualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(instrumentLabel)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(snareCheckBox)
-                                                    .addComponent(pianoCheckBox))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(guitarCheckBox)
-                                                    .addComponent(bellCheckBox))))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(65, 65, 65)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(volumeLabel)
-                                                    .addComponent(tempoLabel))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(236, 236, 236)
-                                                .addComponent(jLabel1))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(otherCheckBox)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(otherInstrumentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(visualizationLabel)
-                                            .addComponent(visualizationChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(randomizeButton)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(playButton)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(stopButton)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(automataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tempoValue)
-                                    .addComponent(volumeValue)))))
+                        .addGap(15, 15, 15)
+                        .addComponent(visualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 26, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(title)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(instrumentLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(pianoCheckBox)
+                                        .addGap(52, 52, 52))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(percussionCheckBox)
+                                        .addGap(18, 18, 18)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(guitarCheckBox)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(brassCheckBox)
+                                        .addGap(217, 217, 217)
+                                        .addComponent(jLabel1))))
+                            .addComponent(title))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(visualizationLabel)
+                            .addComponent(visualizationChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(randomizeButton)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(playButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(stopButton))
+                            .addComponent(volumeLabel)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tempoValue))
+                                .addComponent(tempoLabel)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(volumeValue)))
+                            .addComponent(stringsCheckBox))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(automataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(instrumentLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pianoCheckBox)
+                    .addComponent(guitarCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(brassCheckBox)
+                    .addComponent(percussionCheckBox)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(title)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(instrumentLabel)
-                            .addComponent(tempoLabel))
+                        .addComponent(stringsCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(pianoCheckBox)
-                            .addComponent(guitarCheckBox)
-                            .addComponent(volumeLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(snareCheckBox)
-                            .addComponent(bellCheckBox)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
+                        .addComponent(volumeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tempoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(volumeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(frameSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(volumeValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(otherCheckBox)
-                            .addComponent(otherInstrumentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tempoLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tempoSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tempoValue, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(visualizationLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(visualizationChoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(randomizeButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(playButton)
                             .addComponent(stopButton)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(automataPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(automataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
                 .addComponent(visualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
@@ -347,36 +331,87 @@ public class AutomataMusic extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Adds/Removes piano instruments from instrument pool on check/uncheck.
+     * @param evt the click event.
+     */
     private void pianoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pianoCheckBoxActionPerformed
-  
+        if(instruments.contains(0)){ //0,1,2 are General MIDI piano values.
+            for (int i = 0; i < 2; i++) { 
+                instruments.remove(instruments.indexOf(i));
+            }
+        } else {
+            for (int i = 0; i < 2; i++) {
+                instruments.add(i);
+            }
+        }
     }//GEN-LAST:event_pianoCheckBoxActionPerformed
-
+    /**
+     * Adds/Removes guitar instruments from instrument pool on check/uncheck.
+     * @param evt the click event.
+     */
     private void guitarCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guitarCheckBoxActionPerformed
-
+        if(instruments.contains(25)){ //25,27,31 are General MIDI guitar values.
+            instruments.remove(instruments.indexOf(25));
+            instruments.remove(instruments.indexOf(27));
+            instruments.remove(instruments.indexOf(31));
+        } else {
+            instruments.add(25);
+            instruments.add(27);
+            instruments.add(31);
+        }
+        
     }//GEN-LAST:event_guitarCheckBoxActionPerformed
-
-    private void snareCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_snareCheckBoxActionPerformed
-
-    }//GEN-LAST:event_snareCheckBoxActionPerformed
-
+    /**
+     * Adds/Removes percussion instruments from instrument pool on check/uncheck.
+     * @param evt the click event.
+     */
+    private void percussionCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percussionCheckBoxActionPerformed
+        if(instruments.contains(112)){ //112 to 119 are General MIDI percussion values.
+            for (int i = 112; i < 119; i++) {
+                instruments.remove(instruments.indexOf(i));
+            }
+        } else {
+            for (int i = 112; i < 119; i++) {
+                instruments.add(i);
+            }
+        }
+    }//GEN-LAST:event_percussionCheckBoxActionPerformed
+    /**
+     * Sets tempo based on slider value.
+     * @param evt the StateChanged event.
+     */
     private void tempoSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tempoSliderStateChanged
         this.tempo = tempoSlider.getValue();
         tempoValue.setText(Integer.toString(this.tempo));
     }//GEN-LAST:event_tempoSliderStateChanged
-
-    private void otherInstrumentTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherInstrumentTextFieldActionPerformed
-
-    }//GEN-LAST:event_otherInstrumentTextFieldActionPerformed
-
-    private void bellCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bellCheckBoxActionPerformed
-        {
-        }    }//GEN-LAST:event_bellCheckBoxActionPerformed
-
+    /**
+     * Adds/Removes brass instruments from instrument pool on check/uncheck.
+     * @param evt the click event.
+     */
+    private void brassCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brassCheckBoxActionPerformed
+        if(instruments.contains(56)){ //56-62 are General MIDI brass values.
+            for (int i = 56; i < 62; i++) {
+                instruments.remove(instruments.indexOf(i));
+            }
+        } else {
+            for (int i = 56; i < 62; i++) {
+                instruments.add(i);
+            }
+        }
+        }//GEN-LAST:event_brassCheckBoxActionPerformed
+    /**
+     * Stops the animation and playing of the "music".
+     * @param evt the click event.
+     */
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
-        playThread.interrupt();
+        playThread.interrupt(); //Interrupt the playing thread
         this.animating=false;
     }//GEN-LAST:event_stopButtonActionPerformed
-
+    /**
+     * Sets the number of frames in the piece.
+     * @param evt the StateChanged event.
+     */
     private void frameSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_frameSliderStateChanged
         volumeValue.setText(Integer.toString(frameSlider.getValue()));
         this.numFrames = frameSlider.getValue();
@@ -384,47 +419,90 @@ public class AutomataMusic extends javax.swing.JFrame {
         this.boards = new int[this.numFrames][automatonSize][automatonSize];
         this.generateFrames();
     }//GEN-LAST:event_frameSliderStateChanged
-
+   /**
+    * Randomizes the board and score.
+    * @param evt the click event.
+    */
     private void randomizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_randomizeButtonActionPerformed
         if(!animating){
-            this.board = getRandomArray(automatonSize, automatonSize);
             this.generateFrames();
         }
     }//GEN-LAST:event_randomizeButtonActionPerformed
-
+    /**
+     * Starts the animation and plays the "music".
+     * @param evt the click event.
+     */
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        playThread = new Thread(new MIDIPlayer(tempo,score));
+        playThread = new Thread(new MIDIPlayer(tempo,score,instruments));
         playThread.start();
         this.animating = true;
     }//GEN-LAST:event_playButtonActionPerformed
-
+    /**
+     * Changes the type of simulation.
+     * @param evt the ActionPerformed event.
+     */
     private void visualizationChoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizationChoiceActionPerformed
         this.chosenSim = visualizationChoice.getSelectedItem().toString();
         this.generateFrames();
     }//GEN-LAST:event_visualizationChoiceActionPerformed
+
+    /**
+     * Adds/Removes strings instruments from instrument pool on check/uncheck.
+     * @param evt the click event.
+     */
+    private void stringsCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stringsCheckBoxActionPerformed
+        if(instruments.contains(40)){ //40-48 are General MIDI strings values.
+            for (int i = 40; i < 48; i++) {
+                instruments.remove(instruments.indexOf(i));
+            }
+        } else {
+            for (int i = 40; i < 48; i++) {
+                instruments.add(i);
+            }
+        }
+        
+    }//GEN-LAST:event_stringsCheckBoxActionPerformed
     
+    /**
+     * Sleeps the thread.
+     * @param millis milliseconds thread to be slept for.
+     * @throws InterruptedException 
+     */
     public static void sleep(int millis) throws InterruptedException{
         Thread.sleep(millis);
     }
     
-    public static int[][] getRandomArray(int width, int height){
-        int board[][] = new int[width][height];
-        Random rand = new Random();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                board[i][j] = rand.nextInt(2)*255;
-            }
-        }
-        return board;
-    }
     
+    /**
+     * Collapse 2D array into 1D array.
+     * Averages values of column.
+     * @param arr array to be collapsed.
+     * @return int[] collapsed array.
+     */
+    public static int[] collapse(int[][] arr){
+        int[] returnable = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            int column = 0; //Column sum
+            for (int j = 0; j < arr[0].length; j++) {
+                column+=arr[i][j];
+            }
+            returnable[i] = column/arr[0].length;
+        }
+        return returnable;
+    }
+    /**
+     * Compresses 1D array into boxes.
+     * @param numBoxes number of boxes array to be compressed to.
+     * @param arr array to compress.
+     * @return int[numBoxes] boxified array.
+     */
     public static int[] boxify(int numBoxes, int[] arr){
         int arrayLength = arr.length;
         int[] finalArray = new int[numBoxes];
-        int step = arrayLength/numBoxes;
+        int step = arrayLength/numBoxes; //We want integer division here
 
         for (int i = 0; i < numBoxes; i++) {
-            int steps = 0;
+            int steps = 0; //Number of elements compressed.
             for (int j = i*step; j < (i+1)*step; j++) {
                 finalArray[i]+=arr[j];
                 steps++;
@@ -433,18 +511,12 @@ public class AutomataMusic extends javax.swing.JFrame {
         }
         return finalArray;
     }
-    public static int[] collapse(int[][] arr){
-        int[] returnable = new int[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            int column = 0;
-            for (int j = 0; j < arr.length; j++) {
-                column+=arr[i][j];
-            }
-            returnable[i] = column/arr.length;
-        }
-        return returnable;
-    }
     
+    /**
+     * Converts integer array to grayscale image.
+     * @param array integer array to be converted.
+     * @return BufferedImage of grayscale representation of image.
+     */
     public static BufferedImage arrayToImage(int[][] array){
         BufferedImage img = new BufferedImage(array.length, array[0].length, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < array.length; i++) {
@@ -457,6 +529,12 @@ public class AutomataMusic extends javax.swing.JFrame {
         return img;
     }
     
+    /**
+     * Scales BufferedImage
+     * @param image BufferedImage to be scaled
+     * @param scalingFactor integral scaling factor
+     * @return BufferedImage scaled by a factor of scalingFactor
+     */
     public static BufferedImage scale(BufferedImage image, int scalingFactor){
         AffineTransform scaleTransform = AffineTransform.getScaleInstance(scalingFactor, scalingFactor);
         AffineTransformOp bilinearScaleOp = new AffineTransformOp(scaleTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -465,8 +543,12 @@ public class AutomataMusic extends javax.swing.JFrame {
             new BufferedImage(image.getWidth()*scalingFactor, image.getHeight()*scalingFactor, image.getType()));
     }
     
-    
+    /**
+     * Next animation frame
+     * @param i how far along in the animation.
+     */
     public void nextFrame(int i){
+        //Draw lower visualization
         Graphics g = visualizationPanel.getGraphics();
         BufferedImage img = arrayToImage(score);
         Color gray = new Color(238,238,238);
@@ -474,15 +556,19 @@ public class AutomataMusic extends javax.swing.JFrame {
         g.fillRect(0, 0, 675, 120);
         g.drawImage(scale(img,15), -15*i, 0, rootPane);
         
+        //Draw upper visualization of board
         if (i<numFrames){
             Graphics h = this.automataPanel.getGraphics();
             BufferedImage b = arrayToImage(boards[i]);
             h.setColor(gray);
-            h.fillRect(0, 0, 180, 180);
-            h.drawImage(scale(b,(180/automatonSize)), 0, 0, rootPane);
+            h.fillRect(0, 0, 300, 300);
+            h.drawImage(scale(b,(300/automatonSize)), 0, 0, rootPane);
         }
     }
     
+    /**
+     * Generate the frames from the appropriate automata.
+     */
     public void generateFrames(){
         this.frameNo = 0;
         CellularAutomaton gl;
@@ -490,32 +576,30 @@ public class AutomataMusic extends javax.swing.JFrame {
             gl = new GOL();
         } else if (chosenSim.equalsIgnoreCase("Reaction Diffusion")){
             gl = new ReactionDiffusion();
-        } else {
+        } else if (chosenSim.equalsIgnoreCase("Static")){
             gl = new Static();
+        } else{
+            gl = new Elementary();
         }
-        
-        this.board = gl.initializeFrame();
+        //Generate->Collapse->Boxify
+        this.board = gl.initializeFrame();//Frame 1
         for (int i = 0; i < numFrames; i++) {
             boards[i]=this.board;
             int[] collapsed = collapse(this.board);
             int[] boxed = boxify(8,collapsed);
             score[i] = boxed;
             this.board = gl.nextFrame();
-            
         }
     }
     
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        
+        //System look and feel
         try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e){
             System.out.println(e);
         }
-        
+        //Create main object
         AutomataMusic sv = new AutomataMusic();
         sv.generateFrames();
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -523,27 +607,42 @@ public class AutomataMusic extends javax.swing.JFrame {
                 sv.setVisible(true);
             }
         });
+        //Animation loop
         while(true){
             sv.nextFrame(sv.frameNo);
+            //Disable boxes when animating
             if(sv.animating){
-                sv.randomizeButton.setEnabled(false);
+                sv.guitarCheckBox.setEnabled(false);
+                sv.pianoCheckBox.setEnabled(false);
+                sv.stringsCheckBox.setEnabled(false);
+                sv.percussionCheckBox.setEnabled(false);
+                sv.brassCheckBox.setEnabled(false);
                 sv.tempoSlider.setEnabled(false);
                 sv.frameSlider.setEnabled(false);
                 sv.visualizationChoice.setEnabled(false);
+                sv.randomizeButton.setEnabled(false);
                 sv.playButton.setEnabled(false);
                 sv.stopButton.setEnabled(true);
                 sv.frameNo++;
-            } else {
-                sv.randomizeButton.setEnabled(true);
+            } else { //Enable boxes if not animating
+                sv.guitarCheckBox.setEnabled(true);
+                sv.pianoCheckBox.setEnabled(true);
+                sv.stringsCheckBox.setEnabled(true);
+                sv.percussionCheckBox.setEnabled(true);
+                sv.brassCheckBox.setEnabled(true);
                 sv.tempoSlider.setEnabled(true);
                 sv.frameSlider.setEnabled(true);
                 sv.visualizationChoice.setEnabled(true);
+                sv.randomizeButton.setEnabled(true);
                 sv.playButton.setEnabled(true);
                 sv.stopButton.setEnabled(false);
                 sv.frameNo = 0;
-            }
-            if(sv.frameNo==sv.numFrames){
+            } 
+            if(sv.frameNo==sv.numFrames){ //Stop animation at end of animation
                 sv.animating = false;
+            }
+            if(sv.instruments.isEmpty()){ //Can't play with no instruments
+                sv.playButton.setEnabled(false);
             }
             try{
                 Thread.sleep(60000/sv.tempo);
@@ -557,19 +656,18 @@ public class AutomataMusic extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel automataPanel;
-    private javax.swing.JCheckBox bellCheckBox;
+    private javax.swing.JCheckBox brassCheckBox;
     private javax.swing.JSlider frameSlider;
     private javax.swing.JCheckBox guitarCheckBox;
     private javax.swing.JLabel instrumentLabel;
     private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JCheckBox otherCheckBox;
-    private javax.swing.JTextField otherInstrumentTextField;
+    private javax.swing.JCheckBox percussionCheckBox;
     private javax.swing.JCheckBox pianoCheckBox;
     private javax.swing.JButton playButton;
     private javax.swing.JButton randomizeButton;
-    private javax.swing.JCheckBox snareCheckBox;
     private javax.swing.JButton stopButton;
+    private javax.swing.JCheckBox stringsCheckBox;
     private javax.swing.JLabel tempoLabel;
     private javax.swing.JSlider tempoSlider;
     private javax.swing.JLabel tempoValue;

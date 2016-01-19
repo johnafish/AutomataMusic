@@ -3,12 +3,13 @@ package automatamusic;
 import java.util.Random;
 
 /**
- *
+ * Conway's Game of Life
  * @author John Fish <john@johnafish.ca>
  */
 public class GOL implements CellularAutomaton {
     int[][] previousFrame = new int[width][height];
-    public int countNeighbours(int x, int y, int[][] board){
+    
+    public static int countNeighbours(int x, int y, int[][] board){
         int neighbours=0;
         //Use a for loop to go through the square around cell (x,y)
         for (int i = -1; i <= 1; i++) {
@@ -28,6 +29,10 @@ public class GOL implements CellularAutomaton {
         }
         return neighbours;
     }
+    /**
+     * Random static frame.
+     * @return int[][] random static of 0, 255.
+     */
     public int[][] initializeFrame(){
         Random rand = new Random();
         for (int i = 0; i < width; i++) {
@@ -37,6 +42,10 @@ public class GOL implements CellularAutomaton {
         }
         return previousFrame;
     }
+    /**
+     * Apply GOL rules
+     * @return int[][] current generation of GOL.
+     */
     public int[][] nextFrame(){
         int[][] cellsOnNext = new int[width][height];
         for (int i = 0; i < width; i++) {

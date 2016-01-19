@@ -1,20 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package automatamusic;
 
 import java.util.Random;
 
 /**
- *
+ * Static
  * @author johnafish
  */
 public class Static implements CellularAutomaton{
     Random rand = new Random();
-    @Override
     
+    /**
+     * Random static
+     * @return int[][] random static of 0, 255.
+     */
+    @Override
     public int[][] nextFrame() {
         int[][] board = new int[width][height];
         for (int i = 0; i < width; i++) {
@@ -25,6 +24,10 @@ public class Static implements CellularAutomaton{
         return board;
     }
 
+    /**
+     * Random static
+     * @return int[][] random static of 0, 255.
+     */
     @Override
     public int[][] initializeFrame() {
         return this.nextFrame();

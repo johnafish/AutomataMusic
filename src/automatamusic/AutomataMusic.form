@@ -39,148 +39,125 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <Component id="visualizationPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="visualizationPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="instrumentLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="instrumentLabel" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="snareCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="pianoCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="guitarCheckBox" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="bellCheckBox" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                      </Group>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="volumeLabel" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="tempoLabel" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="tempoSlider" min="-2" pref="300" max="-2" attributes="0"/>
-                                                  <Component id="frameSlider" min="-2" pref="300" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="236" max="-2" attributes="0"/>
-                                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <Component id="pianoCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="otherCheckBox" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="otherInstrumentTextField" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="visualizationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="visualizationChoice" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="randomizeButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="playButton" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="stopButton" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="automataPanel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="percussionCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="guitarCheckBox" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="brassCheckBox" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="217" max="-2" attributes="0"/>
+                                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <Component id="title" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="visualizationLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="visualizationChoice" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="randomizeButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="playButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="stopButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="volumeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="tempoSlider" min="-2" pref="300" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="tempoValue" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="tempoLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="frameSlider" min="-2" pref="300" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="volumeValue" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="stringsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="title" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="automataPanel" min="-2" pref="300" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="12" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="title" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="instrumentLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="pianoCheckBox" alignment="3" max="-2" attributes="0"/>
+                  <Component id="guitarCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="title" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="instrumentLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="tempoLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="pianoCheckBox" alignment="3" max="-2" attributes="0"/>
-                          <Component id="guitarCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="volumeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="snareCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="bellCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="tempoValue" min="-2" pref="38" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="volumeValue" min="-2" pref="38" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="tempoSlider" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="frameSlider" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="brassCheckBox" min="-2" max="-2" attributes="0"/>
+                  <Component id="percussionCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="otherCheckBox" min="-2" max="-2" attributes="0"/>
-                          <Component id="otherInstrumentTextField" min="-2" pref="24" max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="stringsCheckBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="volumeLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="frameSlider" min="-2" max="-2" attributes="0"/>
+                          <Component id="volumeValue" min="-2" pref="38" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="tempoLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="tempoSlider" min="-2" max="-2" attributes="0"/>
+                          <Component id="tempoValue" min="-2" pref="38" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="visualizationLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="visualizationChoice" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="randomizeButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="31" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="playButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="stopButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="automataPanel" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="automataPanel" min="-2" pref="300" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -206,7 +183,7 @@
         <Property name="minorTickSpacing" type="int" value="20"/>
         <Property name="paintLabels" type="boolean" value="true"/>
         <Property name="paintTicks" type="boolean" value="true"/>
-        <Property name="value" type="int" value="120"/>
+        <Property name="value" type="int" value="80"/>
       </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="tempoSliderStateChanged"/>
@@ -219,7 +196,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="tempoValue">
       <Properties>
-        <Property name="text" type="java.lang.String" value="120"/>
+        <Property name="text" type="java.lang.String" value="80"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="instrumentLabel">
@@ -229,48 +206,34 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="pianoCheckBox">
       <Properties>
-        <Property name="selected" type="boolean" value="true"/>
         <Property name="label" type="java.lang.String" value="Piano"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pianoCheckBoxActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="snareCheckBox">
+    <Component class="javax.swing.JCheckBox" name="percussionCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Snare Drum"/>
+        <Property name="text" type="java.lang.String" value="Percussion"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="snareCheckBoxActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="percussionCheckBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="guitarCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Electric Guitar"/>
+        <Property name="text" type="java.lang.String" value="Guitar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="guitarCheckBoxActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="bellCheckBox">
+    <Component class="javax.swing.JCheckBox" name="brassCheckBox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Bell"/>
+        <Property name="text" type="java.lang.String" value="Brass"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bellCheckBoxActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="otherCheckBox">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Other"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="otherInstrumentTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="74"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="otherInstrumentTextFieldActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="brassCheckBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="visualizationLabel">
@@ -281,10 +244,11 @@
     <Component class="javax.swing.JComboBox" name="visualizationChoice">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
+          <StringArray count="4">
             <StringItem index="0" value="Game of Life"/>
             <StringItem index="1" value="Reaction Diffusion"/>
             <StringItem index="2" value="Static"/>
+            <StringItem index="3" value="Wolfram Rule 30"/>
           </StringArray>
         </Property>
       </Properties>
@@ -372,12 +336,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="180" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -386,6 +350,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Frame 1"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="stringsCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Strings"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stringsCheckBoxActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
